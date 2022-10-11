@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}Recorridos de evacuación{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  
+    <!-- Título -->
+  <h1 class="custom-title">Recorridos de evacuación</h1>
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <form action="{{ url_for('recorrido_search') }}" method="POST">
+        <!-- Buscador -->
+        <div class="input-group input-group-sm mb-3">
+          <!-- Select -->
+          <div class="input-group-prepend">
+              <select class="form-select form-select-xs" aria-label=".form-select-xs example" name="search_status">
+                <option id="3" value="3" {% if search_status=="3" %} selected {% endif %}>Cualquiera</option>
+                <option id="1" value="1" {% if search_status=="1" %} selected {% endif %}>Publicado</option>
+                <option id="0" value="0" {% if search_status=="0" %} selected {% endif %}>No publicado</option>
+              </select>
+          </div>
+          <!-- Searchbox -->
+          <input placeholder="Ingrese un recorrido" type="search" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="search_field" value="{% if search_field %}{{search_field}}{% endif %}">
+          
+          <!-- Search icon -->
+          <span class="input-group-append">
+            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+  <table class="table table-striped">
+    <tr>
+      <th scope="col">Código</th>
+      <th scope="col">Nombre del recorrido</th>
+      <th scope="col">Coordenadas</th>
+      <!-- <th scope="col">Estado</th>
+      <th scope="col">Color</th> -->
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    {% for recorrido in recorridos %}
+      <tr>
+        <td>
+          {{ recorrido.code }}
+        </td>
+        <td>
+          {{ recorrido.name }}
+        </td>
+        <td>
+          {{ recorrido.coordinates | truncate(80) | safe }}
+        </td>
+        <!-- <td>
+          {{ zona.status }}
+        </td>
+
+        <!-- Toggle -->
+        <td>
+          {{ zona.color }}
+        </td>-->
+        <td>
+          <a href="{{ url_for('recorrido_view', id=zona.id) }}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Ver {{zona.name}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+        </td>
+
+        <!-- View -->
+        <td>
+          <a href="{{ url_for('recorrido_confirm_delete', id=zona.id) }}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminrecorrido.name}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+        </td>
+        <!-- <td>
+          <a href="{{ url_for('inundable_edit', id=zona.id) }}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar {{zona.name}}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+        </td>-->
+      </tr>
+    {% endfor %}
+  </table>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item {% if is_none(prev_url) %} disabled {% endif %}"><a class="page-link"
+                href="{{prev_url}}">Anterior</a></li>
+            <li class="page-item {% if is_none(next_url) %} disabled {% endif %}"><a class="page-link"
+                href="{{next_url}}">Siguiente</a></li>
+          </ul>
+        </nav>
+  <form action="{{ url_for('recorrido_new')}}" method="POST" enctype="multipart/form-data">
+    <div class="mb-3 col-6">
+      <label for="formFile" class="form-label">Cargar un nuevo .csv</label>
+      <input class="form-control" accept=".csv" type="file" name="fileCSV">
+    </div>
+    <a href="{{ url_for('home') }}" class="btn btn-dark">Volver atrás</a>
+    <button type="submit" class="btn btn-success">Subir archivo .csv</button>
+  </form>
+</article>
+{% endblock %}

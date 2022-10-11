@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Recorridos de evacuación{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Recorrido</h1>
+  <div>
+    <form action="{{ url_for('recorrido_search') }}" method="POST">
+      <input name="search_field" type="text" placeholder="Recorrido a buscar">
+      <select name='search_status'>
+        <option value='1'>Todos los recorridos</option>
+        <option value='True'>Publicado</option>
+        <option value='False'>No publicado</option>
+      </select>
+      <input type="submit" value="Buscar">
+    </form>
+  </div>
+  <table class="table">
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Teléfono</th>
+      <th scope="col">Email</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    {% for recorrido in recorridos %}
+      <tr>
+        <td>
+          {{ recorrido.name }}
+        </td>
+        <td>
+          {{ recorrido.status | boolean_converter("Publicado", "No publicado")}}
+        </td>
+        <td>
+          {{ recorrido.telephone }}
+        </td>
+        <td>
+          {{ recorrido.email }} 
+        </td>
+        <td>
+          <a href="{{ url_for('recorrido_view', id=recorrido.id) }}" method="POST" class="btn btn-warning btn-sm">Detalles</a>
+        </td>
+        <td>
+          <a href="{{ url_for('recorrido_confirmDelete', id=recorrido.id) }}" class="btn btn-danger btn-sm">Eliminar</a>
+        </td>
+        <td>
+          <a href="{{ url_for('recorrido_edit', id=recorrido.id) }}" class="btn btn-warning btn-sm">Modificar</a>
+        </td>
+      </tr>
+    {% endfor %} 
+  </table>
+  <a href="{{ url_for('recorrido_index') }}" class="link">Recorridos de evacuación</a>
+  <a href="{{ url_for('recorrido_new') }}" class="link">Crear recorrido de evacuación</a>
+</article>
+{% endblock %}

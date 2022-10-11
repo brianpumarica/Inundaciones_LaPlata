@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1 class="custom-title">¿Está seguro que desea borrar el usuario {{ user.username }} ?</h1>
+  <div class="custom-boxed col-md-8">
+    <i class="fas fa-user-times fa-7x"></i>
+    <br><br>
+    <form action="{{ url_for('user_delete', id=user.id) }}" >
+      <div class="list-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Nombre</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ user.first_name }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Apellido</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ user.last_name }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Nombre de usuario</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ user.username }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Mail</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ user.email }}</span>
+        </div>
+      </div>
+      <input class="btn btn-danger" type="submit" value="Confirmar">
+      <a href="{{ url_for('user_index') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}

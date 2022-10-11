@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}Zonas inundables - Editar{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Editar zona inundable</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form action="{{ url_for('inundable_edit_confirmed',id=inundable.id)}}" method="POST" class="row g-3 needs-validation" novalidate>
+      <div class="col-md-4">
+        <label for="code" class="form-label">Código</label>
+        <input type="integer" class="form-control" name="code" required value="{{inundable.code}}">
+      </div>
+      <div class="col-md-4">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="name" required value="{{inundable.name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="coordinates" class="form-label">Coordenadas</label>
+        <input type="text" class="form-control" name="coordinates" required value="{{inundable.coordinates}}">
+      </div>
+      <div class="col-md-6">
+        <label for="int" class="form-label">Estado</label>
+        <input type="int" class="form-control" name="status" required value="{{inundable.status}}">
+      </div>
+      <div class="col-md-6">
+        <label for="color" class="form-label">Color</label>
+        <input type="color" class="form-control" name="color" required value="{{inundable.color}}">
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('inundable_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <!-- <button type="reset" class="btn btn-warning">Limpiar</button> -->
+        <button type="submit" class="btn btn-success">Confirmar</button>
+      </div>
+    </form>
+    </div>
+{% endblock %}

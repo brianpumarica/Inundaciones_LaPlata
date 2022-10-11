@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/new.js') }}" ></script>
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Crear un recorrido de evacuación</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form id="create-form" action="{{ url_for('route_create') }}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-4">
+        <label for="name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+      <div class="col-md-4">
+        <label for="description" class="form-label">Descripcion</label>
+        <input type="text" class="form-control" name="description">
+      </div>
+      <div class="col-md-2">
+        <br>
+        <div class="form-check form-switch form-switch-md" style="padding: 8px; margin-left:30px;">
+          <input class="form-check-input" type="checkbox" name="status" unchecked>
+          <label class="form-check-label" for="status" style="padding: 6px;"><b>Publicado</b></label>
+        </div>
+      </div>
+      <p>
+        <input type="text" name="coordinates" id="coordinates"/>
+        <input type="text" id="is_type" value="polyline" hidden/>
+      </p>
+      <div class="map-container d-flex justify-content-center"> 
+        <div id="mapid"></div>
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('route_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="reset" class="btn btn-warning">Limpiar</button>
+        <button type="submit" class="btn btn-success">Crear</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

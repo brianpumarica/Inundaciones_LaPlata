@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- Css and Js files for Search Box-->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <!-- Custom Files -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+    <script type="module" src="{{ url_for('static',filename='js/map/edit.js') }}" ></script>  
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Editar recorrido de evacuación {{route.name}}</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form id="edit-form" action="{{ url_for('route_confirmEdited', id=route.id) }}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-4">
+        <label for="name" class="form-label">
+          <b>Nombre</b>
+        </label>
+        <input type="text" class="form-control" name="name" required value="{{route.name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="description" class="form-label">
+          <b>Descripcion</b>
+        </label>
+        <input type="text" class="form-control" name="description" required value="{{route.description}}">
+      </div>
+      <p>
+        <input type="text" name="coordinates" id="coordinates" value='{{ route.coordinates }}'/>
+        <input type="text" id="is_type" value="polyline" hidden/>
+      </p>
+      <div class="map-container d-flex justify-content-center">
+        <div id="mapid"></div>
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('route_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="submit" class="btn btn-success">Confirmar</button>
+      </div>
+    </form>
+    </div>
+{% endblock %}

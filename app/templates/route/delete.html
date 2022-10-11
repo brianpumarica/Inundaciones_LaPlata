@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Recorrido de evacuación{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1 class="custom-title">¿Está seguro que desea borrar el recorrido? {{ route.name }} ?</h1>
+  <div class="custom-boxed col-md-8">
+    <img src="https://img.icons8.com/ios-filled/90/000000/exit-sign.png">
+    <br><br>
+    <form action="{{ url_for('route_delete', id=route.id) }}" >
+      <div class="list-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Nombre</span>
+          <span class="form-control" aria-label="Username" aria-describedby="basic-addon1">{{ route.name }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Descripcion</span>
+          <span class="form-control" aria-label="Username" aria-describedby="basic-addon1">{{
+            route.description }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Coordenadas</span>
+          <!--<span class="form-control" aria-label="Username" aria-describedby="basic-addon1">{{
+            route.coordinates }}</span>-->
+          <span class="form-control" aria-describedby="basic-addon1"><div class="col-md-12">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver
+            coordenadas</button>
+          </div></span>    
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Estado</span>
+          <span class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+          {{ route.status | boolean_converter("Publicado", "No publicado")}}  
+        </div>
+      </div>
+      <input class="btn btn-danger" type="submit" value="Confirmar">
+      <a href="{{ url_for('route_index') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Coordenadas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {{route.coordinates }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

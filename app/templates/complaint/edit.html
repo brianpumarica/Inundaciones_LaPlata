@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+    <!-- Leaflet files-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- Css and Js files for Search Box-->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <!-- Custom Files -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+    <script type="module" src="{{ url_for('static',filename='js/map/edit.js') }}" ></script>
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Editar Denuncia</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <form id="edit-form" action="{{ url_for('complaint_confirmEdited', id=complaint.id) }}" method="POST">
+        <p>
+          <label>Titulo<label></br>
+          <input name="title" placeholder="titulo" value='{{ complaint.title }}'}/>
+        </p>
+        <p>
+            <label>Categoria<label></br>
+            <select name='category'>
+              {% if complaint.category == 0 %}<option selected value='0'>Alcantarillas tapadas</option>{% else %}<option value='0'>Alcantarillas tapadas</option>{% endif %}
+              {% if complaint.category == 1 %}<option selected value='1'>Basurales</option>{% else %}<option value='1'>Basurales</option>{% endif %}
+              {% if complaint.category == 2 %}<option selected value='2'>Otros</option>{% else %}<option value='2'>Otros</option>{% endif %}
+            </select>
+        </p>
+        <p>
+          <label>Descripción<label></br>
+          <input name="description" value='{{ complaint.description }}'/>
+        </p>
+        <p>
+          <label>Estado<label></br>
+          <select name='status'>
+            {% if complaint.status == 0 %}<option selected value='0'>Sin confirmar</option>{% else %}<option value='0'>Sin confirmar</option>{% endif %}
+            {% if complaint.status == 1 %}<option selected value='1'>En curso</option>{% else %}<option value='1'>En curso</option>{% endif %}
+            {% if complaint.status == 2 %}<option selected value='2'>Resuelta</option>{% else %}<option value='2'>Resuelta</option>{% endif %}
+            {% if complaint.status == 3 %}<option selected value='3'>Cerrada</option>{% else %}<option value='3'>Cerrada</option>{% endif %}
+          </select>
+        </p>
+        <p>
+          <label>Apellido del denunciante<label></br>
+          <input name="surname_user" value='{{ complaint.surname_user }}'/>
+        </p>
+        <p>
+            <label>Nombre del denunciante<label></br>
+            <input name="name_user" value='{{ complaint.name_user }}'/>
+        </p>
+        <p>
+            <label>Telefono del denunciante<label></br>
+            <input name="telephone" value='{{ complaint.telephone }}'/>
+        </p>
+        <p>
+            <label>Email del denunciante<label></br>
+            <input name="email" value='{{ complaint.email }}'/>
+        </p>
+        <p>
+          <input type="text" name="coordinates" id="coordinates" value='{{ complaint.coordinates }}'/>
+          <input type="text" id="is_type" value="complaint" hidden/>
+        </p>
+        <div class="map-container d-flex justify-content-center">
+          <div id="mapid"></div>
+        </div>
+        <p>
+          <input class="btn btn-success" type="submit" value="Confirmar">
+          <a href="{{ url_for('complaint_index') }}" class="btn btn-secondary">Volver atrás</a>
+        </p>
+    </form>
+  </div>
+{% endblock %}

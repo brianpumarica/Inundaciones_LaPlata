@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Recorridos de evacuación{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Recorridos de evacuación</h1>
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <form action="{{ url_for('route_search') }}" method="POST">
+        <!-- Buscador -->
+        <div class="input-group input-group-sm mb-3">
+          <!-- Select -->
+          <div class="input-group-prepend">
+              <select class="form-select form-select-xs" aria-label=".form-select-xs example" name="search_status">
+                <option id="any_status" value="any_status" {% if search_status=="any_status" %} selected {% endif %}>Cualquiera</option>
+                <option id="1" value="1" {% if search_status=="1" %} selected {% endif %}>Publicado</option>
+                <option id="0" value="0" {% if search_status=="0" %} selected {% endif %}>No publicado</option>
+              </select>
+          </div>
+          <!-- Searchbox -->
+          <input type="search" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="search_field" value="{% if search_field %}{{search_field}}{% endif %}">
+          <!-- Search icon -->
+          <span class="input-group-append">
+            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <table class="table">
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Descipción</th>
+      <th scope="col">Estado</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    {% for recorrido in routes %}
+      <tr>
+        <td>
+          {{ recorrido.name }}
+        </td>
+        <td>
+          {{ recorrido.description }}
+        </td>
+        {% if has_permission(session["user"]["id"],"route_toggle") %}
+        <td>
+          <a href="{{ url_for('route_toggle', id=recorrido.id) }}" class="btn btn-secondary btn-sm">
+            {{ recorrido.status | boolean_converter("Publicado", "No publicado")}}
+          </a>
+        </td>
+        {% else %}
+        <td>
+          <a href="{{ url_for('route_toggle', id=recorrido.id) }}" class="btn btn-secondary btn-sm" style="pointer-events: none">
+            {{ recorrido.status | boolean_converter("Publicado", "No publicado")}}
+          </a>
+        </td>
+        {% endif %}
+        <td>
+          <a href="{{ url_for('route_view', id=recorrido.id) }}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Ver {{recorrido.name}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+        </td>
+
+
+        <!-- Eliminar -->
+        {% if has_permission(session["user"]["id"],"route_destroy") %}
+        <td>
+          <a href="{{ url_for('route_confirmDelete', id=recorrido.id) }}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar {{recorrido.name}}" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+
+        <!-- Editar -->
+        {% if has_permission(session["user"]["id"],"route_update") %}
+        <td>
+          <a href="{{ url_for('route_edit', id=recorrido.id) }}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar {{recorrido.name}}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+
+      </tr>
+    {% endfor %} 
+
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item {% if is_none(prev_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{prev_url}}">Anterior</a></li>
+      <li class="page-item {% if is_none(next_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{next_url}}">Siguiente</a></li>
+    </ul>
+  </nav>
+  <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver atrás</a>
+  <a href="{{ url_for('route_new') }}" class="btn btn-success">Crear recorrido de evacuación</a>
+</article>
+{% endblock %}

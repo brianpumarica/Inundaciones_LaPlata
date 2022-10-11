@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Crear un usuario</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form action="{{ url_for('user_create') }}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-4">
+        <label for="first_name" class="form-label">Nombre</label>
+        <input type="text" class="form-control" name="first_name" required value="{% if first_name %}{{first_name}}{% endif %}">
+      </div>
+      <div class="col-md-4">
+        <label for="last_name" class="form-label">Apellido</label>
+        <input type="text" class="form-control" name="last_name" required value="{{last_name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="username" class="form-label">Nombre de usuario</label>
+        <input type="text" class="form-control" name="username" required value="{% if username %}{{username}}{% endif %}">
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" name="email" aria-describedby="emailHelp" required value="{% if email %}{{email}}{% endif %}">
+      </div>
+      <div class="col-md-6">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" name="password" required>
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('user_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="reset" class="btn btn-warning">Limpiar</button>
+        <button type="submit" class="btn btn-success">Crear</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

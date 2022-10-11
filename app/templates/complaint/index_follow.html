@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Seguimiento de Denuncia: {{ complaint.title }} </h1>
+  <table class="table">
+    <tr>
+        <th scope="col">Descripcion</th>
+        <th scope="col">Autor</th>
+        <th scope="col">Fecha de creacion</th>
+   </tr>
+    {% for follow_complaint in follow_complaints %}
+        <tr>
+            <td>
+              {{ follow_complaint.description }}
+            </td>
+            <td>
+              {{ follow_complaint.author }}
+            </td>
+            <td>
+              {{ follow_complaint.date_creation }}
+            </td>
+        </tr>    
+    {% endfor %} 
+
+  </table>
+   <!-- Botones de navegación -->
+   <a href="{{ url_for('complaint_index') }}" class="btn btn-secondary">Volver atrás</a>
+   <a href="{{ url_for('complaint_new_follow', id=complaint.id) }}" class="btn btn-success">Crear seguimiento nuevo</a>
+</article>
+{% endblock %}

@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Catamaran:400,800");
+
+/* Body de toda la aplicación
+    para asignar un color de fondo, un tipo y un tamaño de fuente
+ */
+body {
+  /* background-color: #a5c3df; */
+  font-family: "Montserrat", Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+#footer {
+  width: 75%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#container {
+  width: 75%;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px 40px;
+  border: solid 1px black;
+  margin-top: 20px;
+  min-height: 400px;
+}
+
+a.link {
+  text-transform: uppercase;
+  font-size: 10px;
+  background-color: #92a4ad;
+  padding: 10px 15px;
+  border-radius: 0;
+  color: #416475;
+  display: inline-block;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  line-height: 1.5;
+  text-decoration: none;
+  margin-top: 50px;
+  letter-spacing: 1px;
+}
+
+.custom-title {
+  text-align: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.custom-center-form {
+  display: flex;
+  justify-content: center;
+}
+
+.custom-boxed {
+  /* border: 1px solid #292b2c; */
+  width: 800px;
+  margin: 0 auto;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  text-align: center;
+  display: block;
+  border-radius: 22px;
+}
+
+.custom-table {
+  background-color: #fff;
+}
+
+.custom-button-footer {
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.custom-picker {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  }
+
+.vertical-center {
+  /* position: absolute; */
+  top: 50%;
+}
+
+.colorInputRounded {
+  border: transparent;
+  border-radius: 15px;
+  width: 50px;
+}
+
+.form-switch.form-switch-md {
+  margin-bottom: 1rem; /* JUST FOR STYLING PURPOSE */
+}
+
+.form-switch.form-switch-md .form-check-input {
+  height: 1.5rem;
+  width: calc(2rem + 0.75rem);
+  border-radius: 3rem;
+}
+
+:root{
+  --backcol:#b0bcc5; 
+}
+body{
+  background-color: var(--backcol);
+}

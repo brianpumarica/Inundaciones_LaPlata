@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+    <!-- Leaflet files-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+    <!-- Css and Js files for Search Box-->
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+    <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+    <!-- Custom Files -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+    <script type="module" src="{{ url_for('static',filename='js/map/edit.js') }}" ></script>  
+{% endblock %}
+{% block content %}
+<h1 class="custom-title">Editar punto de encuentro</h1>
+  <div class="custom-center-form" class="col-md-8">
+
+    <!-- Formulario -->
+    <form id="edit-form" action="{{ url_for('location_confirmEdited', id=location.id)}}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-6">
+        <label for="name" class="form-label">
+          <b>Nombre</b>
+        </label>
+        <input type="text" class="form-control" name="name" required value="{{location.name}}">
+      </div>
+      <div class="col-md-6">
+        <label for="address" class="form-label">
+          <b>Direccioón</b>
+        </label>
+        <input type="text" class="form-control" name="address" required value="{{location.address}}">
+      </div>
+      <div class="col-md-6">
+        <label for="telephone" class="form-label">
+          <b>Teléfono</b>
+        </label>
+        <input type="tel" class="form-control" name="telephone" required value="{{location.telephone}}">
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">
+          <b>Email</b>
+        </label>
+        <input type="email" class="form-control" name="email" required value="{{location.email}}">
+      </div>
+  
+      <!-- Mapa -->
+      <p>
+        <input type="text" name="coordinates" id="coordinates" value='{{ location.coordinates }}'/>
+        <input type="text" id="is_type" value="location" hidden/>
+      </p>
+      <div class="map-container d-flex justify-content-center">
+        <div id="mapid"></div>
+      </div>
+
+      <div class="col-md-5">
+        <a href="{{ url_for('location_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="submit" class="btn btn-success">Confirmar</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock %}

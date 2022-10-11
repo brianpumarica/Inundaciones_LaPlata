@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/new.js') }}" ></script>
+{% endblock %}
+{% block content %}
+  <!-- Título -->
+  <h1 class="custom-title">Crear una denuncia</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form id="create-form" action="{{ url_for('complaint_create') }}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-6">
+        <label for="title" class="form-label">
+          <b>Titulo</b>
+        </label>
+        <input type="text" class="form-control" name="title" placeholder="Titulo"required>
+      </div>
+      <div class="col-md-6">
+        <label for="category" class="form-label">
+          <b>Categoria</b>
+        </label>
+        <select class="form-control" name='category' required>
+          <option value='0'>Alcantarillas tapadas</option>
+          <option value='1'>Basurales</option>
+          <option value='2'>Otros</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label for="description" class="form-label">
+          <b>Descripción</b>
+        </label>
+        <input type="tel" class="form-control" name="description" placeholder="Descripción" required>
+      </div>
+      <!--
+      <div class="col-md-6">
+        <label for="status" class="form-label">
+          <b>Estado</b>
+        </label>
+        <select class="form-control" name='status' required>
+          <option value='0'>Sin confirmar</option>
+          <option value='1'>En curso</option>
+          <option value='2'>Resuelta</option>
+          <option value='3'>Cerrada</option>
+        </select>      
+      </div>
+      -->
+      <div class="col-md-6">
+        <label for="surname_user" class="form-label">
+          <b>Apellido del denunciante</b>
+        </label>
+        <input type="text" class="form-control" name="surname_user" placeholder="Apellido del denunciante"required>
+      </div>
+      <div class="col-md-6">
+        <label for="name_user" class="form-label">
+          <b>Nombre del denunciante</b>
+        </label>
+        <input type="text" class="form-control" name="name_user" placeholder="Nombre del denunciante"required>
+      </div>
+      <div class="col-md-6">
+        <label for="telephone" class="form-label">
+          <b>Telefono del denunciante</b>
+        </label>
+        <input type="text" class="form-control" name="telephone" placeholder="Telefono del denunciante"required>
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">
+          <b>Email del denunciante</b>
+        </label>
+        <input type="text" class="form-control" name="email" placeholder="Email del denunciante"required>
+      </div>
+      <div>
+        <p>
+          <input type="text" name="coordinates" id="coordinates"/>
+          <input type="text" id="is_type" value="complaint" hidden/>
+        </p>
+        <div class="map-container d-flex justify-content-center">
+          <div id="mapid"></div>
+        </div> 
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('complaint_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="reset" class="btn btn-warning">Limpiar</button>
+        <button type="submit" class="btn btn-success">Crear</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/view.js') }}" ></script>
+{% endblock %}
+{% block content %}
+<h1 class="custom-title">Ver denuncia</h1>
+<div class="custom-center-form" class="col-md-8">
+  <!-- Formulario -->
+  <form id="create-form" action="{{ url_for('complaint_create') }}" method="POST" class="row g-3 needs-validation">
+    <div class="col-md-6">
+      <label for="title" class="form-label">
+        <b>Titulo</b>
+      </label>
+      <input type="text" class="form-control" name="title" placeholder="Titulo" value="{{ complaint.title }}" readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="category" class="form-label">
+        <b>Categoria</b>
+      </label>
+      <select class="form-control" name='category' disabled>
+        <option value='0' {% if complaint.category == 0 %} selected {% endif %}>Alcantarillas tapadas</option>
+        <option value='1'{% if complaint.category == 1 %} selected {% endif %}>Basurales</option>
+        <option value='2' {% if complaint.category == 2 %} selected {% endif %}>Otros</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="description" class="form-label">
+        <b>Descripción</b>
+      </label>
+      <input type="tel" class="form-control" name="description" placeholder="Descripción" value="{{ complaint.description }}" readonly data-bs-toggle="tooltip" data-bs-placement="top" title="{{complaint.description}}">
+    </div>
+    <div class="col-md-6">
+      <label for="category" class="form-label">
+        <b>Estado</b>
+      </label>
+      <select class="form-control" name='status' disabled>
+        <option value='0' {% if complaint.status == 0 %} selected {% endif %}>Sin confirmar</option>
+        <option value='1'{% if complaint.status == 1 %} selected {% endif %}>En curso</option>
+        <option value='2' {% if complaint.status == 2 %} selected {% endif %}>Resuelta</option>
+        <option value='3' {% if complaint.status == 3 %} selected {% endif %}>Cerrada</option>
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label for="surname_user" class="form-label">
+        <b>Fecha de creación</b>
+      </label>
+      <input type="date" class="form-control" name="date_creation" placeholder="Fecha de creación" value="{{ complaint.date_creation }}" readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="surname_user" class="form-label">
+        <b>Fecha de cierre</b>
+      </label>
+      <input {% if complaint.date_closed %} value="{{ complaint.date_closed }}" type="date" {% endif %} class="form-control" name="date_closed" placeholder="Fecha de cierre" {% if complaint.date_closed %} value="{{ complaint.date_closed }}" {% else %} value="-" {% endif %} readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="surname_user" class="form-label">
+        <b>Apellido del denunciante</b>
+      </label>
+      <input type="text" class="form-control" name="surname_user" placeholder="Apellido del denunciante" value="{{ complaint.surname_user }}" readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="name_user" class="form-label">
+        <b>Nombre del denunciante</b>
+      </label>
+      <input type="text" class="form-control" name="name_user" placeholder="Nombre del denunciante" value="{{ complaint.name_user }}" readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="telephone" class="form-label">
+        <b>Telefono del denunciante</b>
+      </label>
+      <input type="text" class="form-control" name="telephone" placeholder="Telefono del denunciante" value="{{ complaint.telephone }}" readonly>
+    </div>
+    <div class="col-md-6">
+      <label for="email" class="form-label">
+        <b>Email del denunciante</b>
+      </label>
+      <input type="text" class="form-control" name="email" placeholder="Email del denunciante" value="{{ complaint.email }}" readonly>
+    </div>
+    <div class="">
+      <label for="responsible" class="form-label">
+        <b>Responsable</b>
+      </label>
+      <input type="text" class="form-control" name="responsible" placeholder="Usuario responsable de la denuncia" value="{{ users.username }}" readonly>
+    </div>
+    <p>
+      <input type="text" name="coordinates" id="coordinates" value='{{ complaint.coordinates }}'/>
+      <input type="text" name="is_type" id="is_type" value='complaint' hidden/>
+    </p>
+    <div class="map-container d-flex justify-content-center">
+      <div id="mapid"></div>
+    </div>   
+    <div class="col-md-5">
+      <a href="{{ url_for('complaint_index') }}" class="btn btn-secondary">Volver atrás</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

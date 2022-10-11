@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+{% block title %}Zonas inundables - Editar{% endblock %}
+{% block head %}
+  {{ super() }}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Ver zona inundable</h1>
+  <table id="view-form" class="table">
+    <div class="custom-center-form" class="col-md-12">
+      <div class="row">
+        <div class="col-5">
+          <!-- Datos -->
+            <div class="col-md-12">
+              <label for="name" class="form-label">Nombre</label>
+              <input type="text" class="form-control" name="name" required value="{{inundable.name}}" disabled>
+            </div>
+            <div class="col-md-12">
+              <label for="code" class="form-label">Código</label>
+              <input type="integer" class="form-control" name="code" required value="{{inundable.code}}" disabled>
+            </div>
+            <div class="col-md-12">
+              <label for="int" class="form-label">Publicado</label>
+              <input type="int" class="form-control" name="status" required value=" {{ inundable.status | boolean_converter( "Si", "No" )}} " disabled>
+            </div>
+            <div class="col-md-12">
+              <label for="coordinates" class="form-label">Cantidad de puntos</label>
+              <input type="text" class="form-control" name="coordinates" required value=" {{ inundable.coordinates | list_counter() }} " disabled>
+            </div>
+            <br>
+            <div class="col-md-12">
+              <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver coordenadas</button>
+            </div>
+            <hr>
+            <div class="col-5">
+              <a href="{{ url_for('inundable_index') }}" class="btn btn-secondary">Volver atrás</a>
+            </div>
+            <!-- Campos ocultos -->
+            <input type="lista_aux" name="lista_aux" id="lista_aux" value="{{ inundable.coordinates | list_converter() }}" hidden/>
+            <input type="color" class="form-control" name="color" id="zona_color" required value="{{inundable.color}}" hidden>
+        
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Coordenadas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    {% for each in lista %}
+                      {{each}}
+                    {% endfor %}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-3">
+                <div id="map" style="  height: 400px;
+                  width: 600px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </table> 
+<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+
+  function list_converter(coord) {
+    // Le saco los caracteres [ y ] del principio y del final respectivamente
+    aux = coord.substring(1).slice(1,-2);
+    aux = aux.split(", ")
+    const resultado = []
+    for (let i in aux) {
+      una_coordenada = []
+      temp = aux[i].split(",")
+      var latlng = L.latLng(temp[0].substring(1), temp[1].slice(0, -1));
+      resultado.push(latlng)
+    }
+    return resultado;
+  }
+
+  window.onload = function () {
+    var latlngs = list_converter(document.getElementById('lista_aux').value);
+    // var latlngs = document.getElementById('lista_aux').value;
+    var tileLayer = L.tileLayer("http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png", { maxZoom: 18, attribution: 'Sistema de gestión de Zonas Inundables' });
+
+    var map = new L.map('map', {
+      layers: tileLayer
+    }).setView([51.509, -0.08], 13);
+    
+    var polygon = L.polygon(latlngs, { color: document.getElementById('zona_color').value }).addTo(map);
+
+    // zoom the map to the polygon
+    map.fitBounds(polygon.getBounds());
+
+    
+  };
+</script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+{% block title %}Zonas inundables{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Zonas inundables</h1>
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <form action="{{ url_for('inundable_search') }}" method="GET">
+        <!-- Buscador -->
+        <div class="input-group input-group-sm mb-3">
+          <!-- Select -->
+          <div class="input-group-prepend">
+              <select class="form-select form-select-xs" aria-label=".form-select-xs example" name="search_status" onload="myFunction()">
+                <option id="3" value="3" {% if request.args.get("search_status")=="3" %} selected {% endif %}>Todas</option>
+                <option id="1" value="1" {% if request.args.get("search_status")=="1" %} selected {% endif %}>Publicadas</option>
+                <option id="0" value="0" {% if request.args.get("search_status")=="0" %} selected {% endif %}>No publicadas</option>
+              </select>
+          </div>
+          <!-- Searchbox -->
+          <input type="search" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" name="search_field" value="{% if request.args.get("search_field") %}{{request.args.get("search_field")}}{% endif %}">
+          <!-- Search icon -->
+          <span class="input-group-append">
+            <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="submit">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <hr>
+  <table class="table table-striped">
+    <tr>
+      <th scope="col">Código</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Estado</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    {% for zona in flooded %}
+      <tr>
+        <td>
+          {{ zona.code }}
+        </td>
+        <td>
+          {{ zona.name }}
+        </td>
+        <td>
+          <a href="{{ url_for('inundable_toggle', id=zona.id) }}" class="btn btn-secondary btn-sm  {% if not has_permission(session["user"]["id"],"floodable_toggle") %} disabled {% endif %}">{{ zona.status | boolean_converter("Publicada", "No publicada")}}</a>
+        </td>
+        <td>
+          <a href="{{ url_for('inundable_view', id=zona.id) }}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Ver {{zona.name}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+        </td>
+
+        {% if has_permission(session["user"]["id"],"floodable_destroy") %}
+          <td>
+            <a href="{{ url_for('inundable_confirm_delete', id=zona.id) }}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar {{zona.name}}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+          </td>
+        {% else %}
+          <td></td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item {% if is_none(prev_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{prev_url}}">Anterior</a></li>
+      <li class="page-item {% if is_none(next_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{next_url}}">Siguiente</a></li>
+          &nbsp;&nbsp;&nbsp;
+      <!-- Button trigger modal -->
+      <li>  <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Subir archivo .csv
+      </button></li>
+    </ul>
+  </nav>
+  <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver atrás</a>
+</article>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cargar zonas inundables (.csv)</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{ url_for('inundable_new')}}" method="POST" enctype="multipart/form-data">
+        <div class="modal-body">
+            <div class="mb-3 col-12">
+              <input class="form-control" accept=".csv" type="file" name="fileCSV">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <a href="{{ url_for('home') }}" class="btn btn-secondary" data-bs-dismiss="modal">Volver atrás</a>
+          <button type="submit" class="btn btn-success">Subir archivo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

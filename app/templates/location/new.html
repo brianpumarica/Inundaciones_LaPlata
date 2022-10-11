@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/new.js') }}" ></script>
+{% endblock %}
+{% block content %}
+
+  <!-- Título -->
+  <h1 class="custom-title">Crear un punto de encuentro</h1>
+  <div class="custom-center-form" class="col-md-8">
+
+    <!-- Formulario -->
+    <form id="create-form" action="{{ url_for('location_create') }}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-5">
+        <label for="name" class="form-label">
+          <b>Nombre</b>
+        </label>
+        <input type="text" class="form-control" name="name" required>
+      </div>
+      <div class="col-md-5">
+        <label for="address" class="form-label">
+          <b>Direccioón</b>
+        </label>
+        <input type="text" class="form-control" name="address" required>
+      </div>
+      <div class="col-md-2">
+        <br>
+        <div class="form-check form-switch form-switch-md" style="padding: 8px; margin-left:30px;">
+          <input class="form-check-input" type="checkbox" name="status" unchecked>
+          <label class="form-check-label" for="status" style="padding: 6px;"><b>Publicado</b></label>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <label for="telephone" class="form-label">
+          <b>Teléfono</b>
+        </label>
+        <input type="tel" class="form-control" name="telephone" required>
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">
+          <b>Email</b>
+        </label>
+        <input type="email" class="form-control" name="email" required>
+      </div>
+      <div>
+        <p>
+          <input type="text" name="coordinates" id="coordinates"/>
+          <input type="text" id="is_type" value="location" hidden/>
+        </p>
+        <div class="map-container d-flex justify-content-center">
+          <div id="mapid"></div>
+        </div> 
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('location_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <button type="reset" class="btn btn-warning">Limpiar</button>
+        <button type="submit" class="btn btn-success">Crear</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

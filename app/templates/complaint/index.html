@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+{% block title %}Denuncias{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+<article>
+  <h1 class="custom-title">Denuncias</h1>
+  <div class="row">
+    <div class="col-md-5 mx-auto">
+      <form action="{{ url_for('complaint_search') }}" method="POST">
+        <!-- Buscador -->
+        <div class="input-group input-group-sm mb-3">
+          <!-- Select -->
+
+                    
+          <!-- Select y searchbox -->
+          <div class="input-group input-group-sm mb-3">
+            <select class="input-group-text" aria-label=".form-select-xs example" name="search_status">
+              <option id="any_status" value="any_status">Cualquiera</option>
+              <option id="0" value="0">Sin confirmar</option>
+              <option id="1" value="1">En curso</option>
+              <option id="2" value="2">Resuelta</option>
+              <option id="3" value="3">Cerrada</option>
+            </select>
+            <!-- Searchbox -->
+            <input type="search" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" name="search_field" value="{% if search_field %}{{search_field}}{% endif %}">
+          </div>
+          
+          <!-- Fecha - rango de fechas de apertura de la denuncia. -->
+          
+          <!-- Fecha desde -->
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Desde:</span>
+            <input type="date" class="form-control" id="fecha_inicial_del_input" name="fecha_inicial_del_input" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+          </div>
+          
+          <!-- Fecha hasta -->
+          <div class="input-group input-group-sm mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Hasta:</span>
+            <input type="date" class="form-control" id="fecha_final_del_input" name="fecha_final_del_input" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+          </div>
+     
+          <!-- Search icon -->
+          <span class="input-group-append">
+            <button class="btn btn-dark" type="submit">
+              <i class="fa fa-search"> Buscar </i>
+            </button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>  
+  <table class="table">
+    <tr>
+      <th scope="col">Titulo</th>
+      <th scope="col">Categoria</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Fecha de creacion</th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+      <th scope="col"></th>
+    </tr>
+    {% for complaint in complaints %}
+      <tr>
+        <td>
+          {{ complaint.title }}
+        </td>
+        <td>
+          {{ complaint.category | int_converter(["Alcantarillas tapadas", "Basurales", "Otros"])}}
+        </td>
+        <td>
+          {{ complaint.status | int_converter(["Sin Confirmar","En curso","Resuelta","Cerrada"])}}             
+        </td>
+        <td>
+          {{ complaint.date_creation }}
+        </td>
+        <td>
+          {% if complaint.status == 0 %}
+            <a href="{{ url_for('complaint_toggle', id=complaint.id) }}" class="btn btn-secondary btn-sm">No contesta ({{complaint.count_calls}})</a>
+          {% else %}
+            <a href="{{ url_for('complaint_index_follow', id=complaint.id) }}" method="POST" class="btn btn-success">Seguimiento</a>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{{ url_for('complaint_view', id=complaint.id) }}" class="btn btn-secondary btn-sm" data-bs-toggle="tooltip"
+            data-bs-placement="top" title="Ver {{complaint.title}}"><i class="fa fa-eye" aria-hidden="true"></i></a>
+        </td>
+        
+
+        <!-- Eliminar -->
+        {% if has_permission(session["user"]["id"],"complaint_destroy") %}
+        <td>
+          <a href="{{ url_for('complaint_confirmDelete', id=complaint.id) }}" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar {{complaint.title}}" ><i class="fa fa-trash" aria-hidden="true"></i></a>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+
+        <!-- Editar -->
+        {% if has_permission(session["user"]["id"],"complaint_update") %}
+        <td>
+          <a href="{{ url_for('complaint_edit', id=complaint.id) }}" class="btn btn-warning btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar {{complaint.title}}"><i class="fa fa-edit" aria-hidden="true"></i></a>
+        </td>
+        {% else %}
+        <td></td>
+        {% endif %}
+      </tr>
+    {% endfor %} 
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item {% if is_none(prev_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{prev_url}}">Anterior</a></li>
+      <li class="page-item {% if is_none(next_url) %} disabled {% endif %}"><a class="page-link"
+          href="{{next_url}}">Siguiente</a></li>
+    </ul>
+  </nav>
+  <!-- Botones de navegación -->
+  <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver atrás</a>
+  <a href="{{ url_for('complaint_new') }}" class="btn btn-success">Crear denuncia nueva</a> 
+
+</article>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Ver Perfil</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form action="{{ url_for('user_edit_confirmed',id=user.id)}}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-4">
+        <label for="first_name" class="form-label">
+          <b>Nombre</b>
+        </label>
+        <input type="text" readonly class="form-control" name="first_name" required value="{{user.first_name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="last_name" class="form-label">
+          <b>Apellido</b>
+        </label>
+        <input type="text" readonly class="form-control" name="last_name" required value="{{user.last_name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="username" class="form-label">
+          <b>Nombre de usuario</b>
+        </label>
+        <input type="text" readonly class="form-control" name="username" required value="{{user.username}}">
+      </div>
+      <div class="col-md-6">
+        <label for="email" class="form-label">
+          <b>Email</b>
+        </label>
+        <input type="email" readonly class="form-control" name="email" aria-describedby="emailHelp" required value="{{user.email}}">
+      </div>
+      <div class="col-md-6">
+        <label for="password" class="form-label">
+          <b>Contraseña</b>
+        </label>
+        <input type="password" readonly class="form-control" name="password" required value="{{user.password}}">
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver atrás</a>
+        {% if has_permission(session["user"]["id"],"user_update") %}
+          <td>
+            <a href="{{ url_for('user_edit', id=user.id) }}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar {{user.username}}">Habilitar edición</a>
+          </td>
+        {% else %}
+          <td></td>
+        {% endif %}
+      </div>
+    </form>
+    </div>
+{% endblock %}

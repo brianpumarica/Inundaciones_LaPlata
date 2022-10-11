@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% block title %}Punto de encuentro{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1 class="custom-title">¿Está seguro que desea borrar el punto de encuentro {{location.name}}?</h1>
+  <div class="custom-boxed col-md-8">
+    <img src="https://img.icons8.com/ios-filled/120/000000/meeting.png" /> 
+    <br><br>
+    <form action="{{ url_for('location_delete', id=location.id) }}" >
+      <div class="list-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Nombre</span>
+          <span class="form-control" aria-label="name" aria-describedby="basic-addon1">{{ location.name }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Dirección</span>
+          <span class="form-control" aria-label="address" aria-describedby="basic-addon1">{{
+            location.address }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Coordenadas</span>
+          <span class="form-control" aria-label="coordinates" aria-describedby="basic-addon1">{{
+            location.coordinates }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Teléfono</span>
+          <span class="form-control" aria-label="telephone" aria-describedby="basic-addon1">{{
+            location.telephone }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Estado</span>
+          <span class="form-control" aria-label="status" aria-describedby="basic-addon1">
+            {{ location.status | boolean_converter("Publicado", "No publicado")}}  
+          </span>
+        </div>
+      </div>
+      <input class="btn btn-danger" type="submit" value="Confirmar">
+      <a href="{{ url_for('location_index') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+{% endblock %}

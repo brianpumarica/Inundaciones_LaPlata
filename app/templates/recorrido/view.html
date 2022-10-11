@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% block title %}Puntos de encuentro{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <script src="https://unpkg.com/wrld.js@1.x.x"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/view_polygon.js') }}" ></script>
+{% endblock %}
+{% block content %}
+<article>
+    <h1 class="custom-title">Recorrido</h1>
+    <div>
+        <form action="{{ url_for('recorrido_search') }}" method="POST">
+          <input name="search_field" type="text" placeholder="Escribir punto de encuentro">
+          <select name='search_status'>
+            <option value='1'>Cualquiera</option>
+            <option value='True'>Publicado</option>
+            <option value='False'>No publicado</option>
+          </select>
+          <input type="submit" value="Buscar">
+        </form>
+      </div>
+    <table id="view-form" class="table">
+      <tr>
+        <th scope="col">Nombre</th>
+        <th scope="col">Dirección</th>
+        <th scope="col">Coordenadas (latitud, longitud)</th>
+        <th scope="col">Estado</th>
+        <th scope="col">Teléfono</th>
+        <th scope="col">Email</th>
+        <th scope="col"></th>
+        <th scope="col"></th>
+      </tr>
+        <tr>
+          <td>
+            {{ recorrido.name }}
+          </td>
+          <td>
+            {{ recorrido.address }}
+          </td>
+          <td>
+            {{ recorrido.coordinates }}
+          </td>
+          <td>
+            {{ recorrido.status | boolean_converter("Publicado", "No publicado")}}
+          </td>
+          <td>
+            {{ recorrido.telephone }}
+          </td>
+          <td>
+            {{ recorrido.email }} 
+          </td>
+          <td>
+            <a href="{{ url_for('recorrido_confirmDelete', id=recorrido.id) }}" class="btn btn-danger btn-sm">Eliminar</a>
+          </td>
+          <td>
+            <a href="{{ url_for('recorrido_edit', id=recorrido.id) }}" class="btn btn-warning btn-sm">Modificar</a>
+          </td>
+        </tr>
+    </table>
+    <p>
+      <input type="text" name="coordinates" id="coordinates" value='{{ recorrido.coordinates }}'/>
+    </p>
+    <div class="map-container">
+      <div id="mapid"></div>
+    </div>     
+    <a href="{{ url_for('recorrido_index') }}" class="link">Recorridos de evacuación</a>
+    <a href="{{ url_for('recorrido_new') }}" class="link">Crear recorrido de evacuación</a>
+</article>
+{% endblock %}

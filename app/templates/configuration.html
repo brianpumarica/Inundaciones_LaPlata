@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+{% block title %}Configuración{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+    <!-- Título -->
+    <h1 class="custom-title">Configuración de la página</h1>
+    <div class="custom-center-form" class="col-md-8" style="text-align: center">
+
+      <!-- Formulario -->
+      <form action="{{url_for('configuration_update')}}" method="POST">
+
+        <!-- Elementos por página (per_page) -->
+        <div class="form-group">
+          <label for="pagination_input"><b>Elementos por página:</b></label>
+          {% if has_permission(session["user"]["id"],"configuration_update") %}
+            <input name="pagination_input" value="{{ config.per_page }}" type="number" class="form-control" aria-describedby="perpageHelp" placeholder="Ingrese un valor">
+            <small id="perpageHelp" class="form-text text-muted">Únicamente valores numéricos.</small>
+          {% else %}
+            <input name="pagination_input" value="{{ config.per_page }}" type="number" class="form-control" aria-describedby="perpageHelp" placeholder="Ingrese un valor" disabled>
+          {% endif %}
+        </div>
+        <br>
+
+        <!-- Criterio de ordenación (order) -->
+        <div class="form-group">
+          <label for="sorting_input"><b>Criterio de ordenación:</b></label>
+          {% if has_permission(session["user"]["id"],"configuration_update") %}
+            <select class="form-control" value="{{ config.order }}" name='pagination_order'>
+              <option value='0' {% if config.order==0 %} selected  {% endif %}>Ascendente</option>
+              <option value='1' {% if config.order==1 %} selected  {% endif %}>Descendente</option>
+            </select>
+          {% else %}
+            <select class="form-control" value="{{ config.order }}" name='pagination_order' disabled>
+              <option value='0' {% if config.order==0 %} selected  {% endif %}>Ascendente</option>
+              <option value='1' {% if config.order==1 %} selected  {% endif %}>Descendente</option>
+            </select>
+          {% endif %}
+        </div>
+        <br>
+
+        <!-- Paleta de colores app privada -->
+        <div class="form-group">
+          <label for="sorting_input"><b>Paleta de colores (App privada):</b></label>
+          <br>
+          <div class="container">
+            {% if has_permission(session["user"]["id"],"configuration_update") %}
+            <div class="row">
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv1" value="{{ (config.color_private).split(",")[0] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fondo">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv2" value="{{ (config.color_private).split(",")[1] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fuente">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv3" value="{{ (config.color_private).split(",")[2] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de la barra de navegación">
+              </div>
+            </div>
+            {% else %}
+            <div class="row">
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv1" value="{{ (config.color_private).split(",")[0] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fondo">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv2" value="{{ (config.color_private).split(",")[1] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fuente">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="priv3" value="{{ (config.color_private).split(",")[2] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de la barra de navegación">
+              </div>
+            </div>
+            {% endif %}
+            <div class="row">
+              <div class="col">
+                Color de fondo
+              </div>
+              <div class="col">
+                Color de fuente
+              </div>
+              <div class="col">
+                Color barra de navegación
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+        <!-- Paleta de colores app pública -->
+        <div class="form-group">
+          <label for="sorting_input"><b>Paleta de colores (App pública):</b></label>
+          <br>
+          <div class="container">
+            {% if has_permission(session["user"]["id"],"configuration_update") %}
+            <div class="row">
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub1" value="{{ (config.color_public).split(",")[0] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fondo">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub2" value="{{ (config.color_public).split(",")[1] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fuente">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub3" value="{{ (config.color_public).split(",")[2] }}" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de la barra de navegación">
+              </div>
+            </div>
+            {% else %}
+            <div class="row">
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub1" value="{{ (config.color_public).split(",")[0] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fondo">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub2" value="{{ (config.color_public).split(",")[1] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de fuente">
+              </div>
+              <div class="col">
+                <input type="color" list="presets" class="colorInputRounded" name="pub3" value="{{ (config.color_public).split(",")[2] }}" disabled data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color de la barra de navegación">
+              </div>
+            </div>
+            {% endif %}
+            <div class="row">
+              <div class="col">
+                Color de fondo
+              </div>
+              <div class="col">
+                Color de fuente
+              </div>
+              <div class="col">
+                Color barra de navegación
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br>
+
+        <!-- Botones de navegación y guardar cambios -->
+        <a href="{{ url_for('home') }}" class="btn btn-secondary">Volver atrás</a>
+        {% if has_permission(session["user"]["id"],"configuration_update") %}
+          <button type="submit" class="btn btn-success vertical-center">Guardar cambios</button>
+        {% endif %}
+        
+      </form>
+    </div>
+{% endblock %}

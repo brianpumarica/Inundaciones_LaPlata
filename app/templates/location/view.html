@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+{% block title %}Puntos de encuentro{% endblock %}
+{% block head %}
+  {{ super() }}
+  <!-- Leaflet files-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+  <!-- Css and Js files for Search Box-->
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+  <script src="https://cdn-geoweb.s3.amazonaws.com/esri-leaflet-geocoder/0.0.1-beta.5/esri-leaflet-geocoder.js"></script>
+  <!-- Custom Files -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='css/map.css') }}" />
+  <script type="module" src="{{ url_for('static',filename='js/map/view.js') }}" ></script>
+{% endblock %}
+{% block content %}
+<article>
+    <!-- Título -->
+    <h1 class="custom-title">
+      Punto de encuentro {{location.name}}
+    </h1>
+
+    <!-- Campos a mostrar -->
+    <div class="container px-4">
+      <div class="row gx-4">
+        <div class="col">
+         <div class="p-3 border bg-light">
+           <b>Nombre:</b> {{location.name}}
+          </div>
+        </div>
+        <div class="col">
+          <div class="p-3 border bg-light">
+            <b>Direccion:</b> {{location.address}}
+          </div>
+         </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container px-4">
+      <div class="row gx-4">
+        <div class="col">
+         <div class="p-3 border bg-light">
+           <b>Estado:</b> {{location.status}}
+          </div>
+        </div>
+        <div class="col">
+          <div class="p-3 border bg-light">
+            <b>Teléfono:</b> {{location.telephone}}
+          </div>
+         </div>
+      </div>
+    </div>
+
+    <br>
+
+    <div class="container px-4">
+      <div class="row gx-4">
+        <div class="col">
+         <div class="p-3 border bg-light">
+           <b>Mail:</b> {{location.email}}
+          </div>
+        </div>
+        <div class="col">
+          <div class="p-3 border bg-light">
+            <b>Coordenadas:</b> {{location.coordinates}}
+          </div>
+         </div>
+      </div>
+
+      <br>
+      
+      <!-- Sección del mapa -->
+      <div class="container px-4">
+        <p>
+          <input type="text" name="coordinates" id="coordinates" value='{{location.coordinates}}'/>
+          <input type="text" id="is_type" value="location" hidden/>
+        </p>
+        <div class="map-container d-flex justify-content-center">
+          <div id="mapid"></div>
+        </div>
+        
+        <br>
+
+        <!-- Botones de atrás, editar y eliminar -->
+        <a href="{{ url_for('location_index') }}" class="btn btn-secondary">
+          Volver atrás
+        </a>
+        <a href="{{ url_for('location_edit', id=location.id) }}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar {{location.name}}">
+          Editar
+        </a>
+        <!-- Eliminar -->
+        {% if has_permission(session["user"]["id"],"location_destroy") %}
+        <a href="{{ url_for('location_confirmDelete', id=location.id) }}" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar {{location.name}}">
+          Borrar
+        </a>
+        {% endif %}        
+      </div>
+</article>
+{% endblock %}

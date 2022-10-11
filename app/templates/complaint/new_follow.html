@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}Consultas{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+ <!-- Título -->
+ <h1 class="custom-title">Crear seguimiento de la denuncia </h1> 
+ <div class="custom-center-form" class="col-md-8">
+   <!-- Formulario -->
+   <form action="{{ url_for('create_follow') }}" method="POST" class="row g-3 needs-validation">
+    <div class="col-md-6">
+      <label for="description" class="form-label">
+        <b>Descripción</b> 
+      </label>
+      <input type="text" class="form-control" name="description" placeholder="Descripción"required>
+    </div>
+    <input type="text" name="id_complaint" value='{{ id_complaint }}' hidden>
+    <div class="col-md-8">
+      <a href="{{ url_for('complaint_index') }}" class="btn btn-secondary">Volver atrás</a>
+      <button type="reset" class="btn btn-warning">Limpiar</button>
+      <button type="submit" class="btn btn-success">Crear</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

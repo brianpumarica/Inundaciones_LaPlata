@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1 class="custom-title">Editar usuario</h1>
+  <div class="custom-center-form" class="col-md-8">
+    <!-- Formulario -->
+    <form action="{{ url_for('user_edit_confirmed',id=user.id)}}" method="POST" class="row g-3 needs-validation">
+      <div class="col-md-4">
+        <label for="first_name" class="form-label">
+          <b>Nombre</b>
+        </label>
+        <input type="text" class="form-control" name="first_name" required value="{{user.first_name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="last_name" class="form-label">
+          <b>Apellido</b>
+        </label>
+        <input type="text" class="form-control" name="last_name" required value="{{user.last_name}}">
+      </div>
+      <div class="col-md-4">
+        <label for="username" class="form-label">
+          <b>Nombre de usuario</b>
+        </label>
+        <input type="text" class="form-control" name="username" required value="{{user.username}}">
+      </div>
+      <div class="col-md-4">
+        <label for="email" class="form-label">
+          <b>Email</b>
+        </label>
+        <input type="email" class="form-control" name="email" aria-describedby="emailHelp" required value="{{user.email}}">
+      </div>
+      <div class="col-md-4">
+        <label for="password" class="form-label">
+          <b>Contraseña</b>
+        </label>
+        <input type="password" class="form-control" name="password" required value="{{user.password}}">
+      </div>
+      <div class="col-md-4">
+        <label for="role" class="form-label">
+          <b>Rol/es</b>
+        </label>
+        {% if is_admin(user.id) %}
+          <select class="form-select" class="form-label" required name="role" disabled >
+            <option value="Sin rol" {% if sin_rol(user.id) %} selected {% endif %}>Sin Rol</option>
+            <option value="2" {% if not is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador</option>
+            <option value="1" {% if is_admin(user.id) and not is_operador(user.id) %} selected {% endif %}>Administrador</option>
+            <option value="0" {% if is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador y Administrador</option>
+          </select>
+          <select class="form-select" class="form-label" required name="role" hidden >
+            <option value="Sin rol" {% if sin_rol(user.id) %} selected {% endif %}>Sin Rol</option>
+            <option value="2" {% if not is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador</option>
+            <option value="1" {% if is_admin(user.id) and not is_operador(user.id) %} selected {% endif %}>Administrador</option>
+            <option value="0" {% if is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador y Administrador</option>
+          </select>
+        {% else %}
+          <select class="form-select" class="form-label" required name="role" >
+            <option value="Sin rol" {% if sin_rol(user.id) %} selected {% endif %}>Sin Rol</option>
+            <option value="2" {% if not is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador</option>
+            <option value="1" {% if is_admin(user.id) and not is_operador(user.id) %} selected {% endif %}>Administrador</option>
+            <option value="0" {% if is_admin(user.id) and is_operador(user.id) %} selected {% endif %}>Operador y Administrador</option>
+          </select>
+        {% endif %}
+      </div>
+      <div class="col-md-5">
+        <a href="{{ url_for('user_index') }}" class="btn btn-secondary">Volver atrás</a>
+        <!-- <button type="reset" class="btn btn-warning">Limpiar</button> -->
+        <button type="submit" class="btn btn-success">Confirmar</button>
+      </div>
+    </form>
+    </div>
+{% endblock %}

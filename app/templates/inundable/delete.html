@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Usuarios{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+
+  <h1 class="custom-title">¿Está seguro que desea borrar la zona inundable {{ inundable.name }} ?</h1>
+  <div class="custom-boxed col-md-8">
+    <img src="https://img.icons8.com/material/90/000000/rain--v1.png" />
+    <br><br>
+    <form action="{{ url_for('inundable_delete', id=inundable.id) }}" >
+      <div class="list-group">
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Nombre</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ inundable.name }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Codigo</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ inundable.code }}</span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Coordenadas</span>
+          <span class="form-control" aria-describedby="basic-addon1"><div class="col-md-12">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">Ver
+              coordenadas</button>
+          </div></span>
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text col-md-4" id="basic-addon1">Color</span>
+          <span class="form-control" aria-describedby="basic-addon1">{{ inundable.color }}</span>
+        </div>
+      </div>
+      <input class="btn btn-danger" type="submit" value="Confirmar">
+      <a href="{{ url_for('inundable_index') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Coordenadas</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            {% for each in lista %}
+            {{each}}
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+{% endblock %}

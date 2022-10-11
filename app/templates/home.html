@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<article>
+  <!-- Título -->
+  <h1 class="custom-title">Centro de prevencion de inundaciones</h1>
+
+  <!-- Acordeón de servicios -->
+  <div class="accordion" id="accordionServicios">
+    <!-- Puntos de encuentro -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            <img src="https://img.icons8.com/ios-filled/30/000000/meeting.png" /> &nbsp; Puntos de encuentro
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionServicios">
+          <div class="accordion-body">
+            Aquí se podrán gestionar los <strong>puntos de encuentro</strong> establecidos por el municipio. Podrán visualizarse los puntos de encuentro actuales, cargar nuevos, actualizar los existentes y borrar según sea necesario. 
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %} 
+              <code><a href="{{ url_for('location_index') }}" style="text-decoration: none">Acceder</a></code>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    <!-- Zonas inundables -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            <img src="https://img.icons8.com/ios-filled/30/000000/flood-car.png" /> &nbsp Zonas inundables
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionServicios">
+          <div class="accordion-body">
+            Aquí se podrán gestionar las <strong>zonas inundables</strong> de la ciudad y sus alrededores. Podrán visualizarse las
+            zonas inundables registradas hasta el momento, cargar nuevas, actualizar las existentes y borrar según sea necesario.
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %}
+            <code><a href="{{ url_for('inundable_index') }}" style="text-decoration: none">Acceder</a></code>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    <!-- Recorridos de evacuación -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            <img src="https://img.icons8.com/ios-filled/30/000000/exit-sign.png" /> &nbsp; Recorridos de evacuación
+          </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionServicios">
+          <div class="accordion-body">
+            Aquí se podrán gestionar los <strong>recorridos de evacuación</strong> establecidos. Podrán visualizarse los
+            recorridos de evacuación vigentes, cargar nuevos, actualizar los existentes y borrar según sea necesario.
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %}
+             <code><a href="{{ url_for('route_index')}}" style="text-decoration: none">Acceder</a></code>
+             {% endif %}
+          </div>
+        </div>
+      </div>
+    <!-- Denuncias -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            <img src="https://img.icons8.com/ios-filled/30/000000/clipboard.png"/> &nbsp; Denuncias
+          </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionServicios">
+          <div class="accordion-body">
+            Aquí se podrán gestionar las <strong>denuncias</strong> recibidas. Podrán visualizarse los
+            reclamos hechos por los usuarios así como también darles un seguimiento.
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %}
+             <code><a href="{{ url_for('complaint_index')}}" style="text-decoration: none">Acceder</a></code>
+             {% endif %}
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <br>
+
+  <!-- Acordeón de configuraciones -->
+  <div class="accordion" id="accordionConfig">
+    <!-- Usuarios -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFive">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            <img src="https://img.icons8.com/ios-filled/30/000000/groups.png"/> &nbsp; Usuarios
+          </button>
+        </h2>
+        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionConfig">
+          <div class="accordion-body">
+            Aquí se podrán gestionar los <strong>usuarios</strong> dados de alta en el sistema. Podrán verse los usuarios creados, dar de alta nuevos, editar información de los usuarios y gestionar configuraciones. 
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %} 
+              <code><a href="{{ url_for('user_index') }}" style="text-decoration: none">Acceder</a></code>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    <!-- Configuración del sistema -->
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingSix">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            <img src="https://img.icons8.com/ios-filled/30/000000/settings.png"/> &nbsp Configuración del sistema
+          </button>
+        </h2>
+        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionConfig">
+          <div class="accordion-body">
+            Aquí se podrá gestionar las <strong>configuraciones del sistema</strong>. Podrán establecerse los
+            criterios de paginación (como el número de elementos por página), el criterio de ordenación y las paletas de colores de las aplicaciones.
+            {% if not is_authenticated(session) %}
+              <code><a href="{{ url_for('auth_login') }}" style="text-decoration: none">Inicia sesión para poder acceder</a></code>
+            {% else %}
+            <code><a href="{{ url_for('configuration_index') }}" style="text-decoration: none">Acceder</a></code>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+  </div>
+</article>
+{% endblock %}

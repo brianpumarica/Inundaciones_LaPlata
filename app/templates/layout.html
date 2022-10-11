@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <!-- Head -->
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.1.1-dist/css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+      integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <script src="{{ url_for('static', filename='bootstrap-5.1.1-dist/js/bootstrap.js') }}"></script>
+    <title>{% block title %}{% endblock %}</title>
+    {% endblock %}
+  </head>
+
+  <!-- Body -->
+  <body class="custom-body">
+
+    <!-- Barra de navegacion -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="customBar">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <!-- Home (icono) -->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">
+                <img src="https://img.icons8.com/external-vitaliy-gorbachev-fill-vitaly-gorbachev/25/000000/external-placeholder-location-vitaliy-gorbachev-fill-vitaly-gorbachev-2.png"/>
+              </a>
+            </li>
+
+            <!-- Solapa de servicios -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                Servicios
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <!-- Puntos de encuentro -->
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="{{ url_for('location_index') }}">
+                    Puntos de encuentro
+                  </a>
+                </li>
+                  <hr class="dropdown-divider">
+
+                <!-- Zonas inundables -->
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="{{ url_for('inundable_index') }}">
+                    Zonas inundables
+                  </a>
+                </li>
+                <hr class="dropdown-divider">
+
+                <!-- Recorridos de evacuación -->
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="{{ url_for('route_index') }}">
+                    Recorridos de evacuación
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <!-- Solapa de configuración -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Configuración
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                <!-- Usuarios -->
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="{{ url_for('user_index') }}">
+                    Usuarios
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                
+                <!-- Configuración de sistema -->
+                <li>
+                  <a class="dropdown-item" aria-current="page" href="{{ url_for('configuration_index') }}">
+                    Configuración de sistema
+                  </a>
+                </li>    
+              </ul>
+            </li>
+
+            <!-- Solapa de denuncias -->
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="{{ url_for('complaint_index') }}">
+                Denuncias
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Sección derecha (sesión) -->
+        {% if not is_authenticated(session) %}
+          <a href="{{ url_for('auth_login') }}" class="btn btn-dark d-flex">
+            Iniciar sesión
+          </a>
+        {% else %}
+          <div class="dropdown d-flex">
+            <button type="button" class="btn btn-secondary dropdown-toggle" id="dropdownMenuOffset" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user"></i> &nbsp; Hola {{session.get('user').nombre}}!
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
+              <li>
+                <a class="dropdown-item" href="{{ url_for('user_show', id=session.get('user').id) }}">
+                  Perfil
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{ url_for('auth_logout') }}">
+                  Cerrar sesion
+                </a>
+              </li>
+            </ul>
+          </div>
+        {% endif %}
+      </div>
+    </nav>
+    
+    <!-- Flash messages -->
+    <div id="content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class=flashes>
+          {% for category, message in messages %}
+            <div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+
+      <div class="container">
+        <div class="row justify-content-md-center">
+          <div class="col-md-10">
+            {% block content %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div id="footer">
+      {% block footer %}
+      <hr>
+      <footer class="page-footer font-small indigo">
+      
+        <!-- Footer Links -->
+        <div class="container text-center text-md-left">
+      
+          <!-- Grid row -->
+          <div class="row">
+    
+            <!-- Grid column -->
+            <div class="col-md-3 mx-auto">
+      
+              <!-- Links -->
+              <h5 class="font-weight-bold text-uppercase mt-3 mb-4"><i class="fa fa-phones" aria-hidden="true"></i></h5> <!-- Para que aparezca el logo, sacar la s de phoneS -->
+      
+              <ul class="list-unstyled">
+                <li>
+                  <button type="button" class="btn btn-outline-primary custom-button-footer"> 100 <br><small>Bomberos</small></button>
+                </li>
+                <hr>
+                <li>
+                  <button type="button" class="btn btn-outline-primary custom-button-footer">130<br><small>Defensa civil</small></button>
+                </li>
+              </ul>
+      
+            </div>
+            <!-- Grid column -->
+      
+            <hr class="clearfix w-100 d-md-none">
+      
+            <!-- Grid column -->
+            <div class="col-md-3 mx-auto">
+      
+              <!-- Links -->
+              <h5 class="font-weight-bold text-uppercase mt-3 mb-4">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+              </h5>
+              <ul class="list-unstyled">
+                <li>
+                  <button type="button" class="btn btn-outline-primary custom-button-footer">
+                    106 <br><small>Prefectura</small>
+                  </button>
+                </li>
+                <hr>
+                <li>
+                  <button type="button" class="btn btn-outline-primary custom-button-footer">
+                    107 <br><small>Ambulancia</small>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <!-- Grid column -->
+      
+            <hr class="clearfix w-100 d-md-none">
+      
+            <!-- Grid column -->
+            <div class="col-md-3 mx-auto">
+      
+              <!-- Links -->
+              <h5 class="font-weight-bold text-uppercase mt-3 mb-4">
+                <i class="fa fa-phones" aria-hidden="true"></i>
+              </h5> <!-- Para que aparezca el logo, sacar la s de phoneS -->
+      
+              <ul class="list-unstyled">
+              <li>
+                  <a type="button" href="tel:107" class="btn btn-outline-primary custom-button-footer">
+                    107 <br><small>Atención al vecino</small>
+                  </a>
+              </li>
+              <hr>
+              <li>
+                  <button type="button" class="btn btn-outline-primary custom-button-footer">
+                    911 <br><small>Policía</small>
+                  </button>
+              </li>
+              </ul>
+            </div>
+          </div>      
+        </div>
+      
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2021 Grupo 29 - Proyecto de Software:
+          <a href="https://gitlab.catedras.linti.unlp.edu.ar/proyecto2021/proyectos/grupo29/">
+            GitLab
+          </a>
+        </div>
+      </footer>
+
+      <input id="prodId" name="prodId" type="hidden" value="#CD5C5C">
+      {% endblock %}
+    </div>
+  </body>
+</html>
+
+<script>
+  fetch(`https://127.0.0.1:5000/api/configuration/`).then((response) => {
+        return response.json();
+      }).then((json) => {
+
+        // Obtengo la paleta de colores de la aplicación privada
+        var aux = json.color_private.split(",")
+
+        // Asigno el color de fondo (priv)
+        document.body.style.backgroundColor = aux[0];
+        
+        // Asigno el color de fuente (priv)
+        document.body.style.color = aux[1];
+
+        // Asigno el color de la barra de navegación (priv)
+        document.getElementById("customBar").style.setProperty('background-color', aux[2]);
+
+      }).catch((e) => {
+        console.log(e)
+      })
+  </script>

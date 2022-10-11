@@ -1,0 +1,18 @@
+.map-container {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+#mapid {
+  height: 400px;
+  width: 600px;
+}
+
+#latitude, #longitude , #coordinates{
+    display: none; 
+}
+
+
+#map {
+  height: 180px;
+}
